@@ -3,33 +3,30 @@
 
 #include <iostream> 
 #include <memory>
-#include <initializer_list> // предоставляет инициализационный список
+// #include <initializer_list> // предоставляет инициализационный список
 // #include "s21_iterators.h"
 namespace s21
 {    
-
-  
-
     template<typename T>
     class member{ 
-        // friend class list;
+        // friend class Iterator;
         // буду использовать композицию вместо наследования
         // так смогу создать элементы существующего класса в другом классе
         public:
-            T value_get();
             T value;
-            std::shared_ptr<member> next; 
+            member<T>* next; 
             /* умный указатель. он сам очищает память как только станет ненужен
             так же не дает другим умным указателям указывать на эту область памяти. профит 
             по умолчанию инициализируется значением nullptr*/
-            member* before;
+            member<T>* before;
             member();
-            member(T value, std::shared_ptr<member> next = NULL, member* before = NULL);
+            // member(T value);
+            member( T value, member* next = nullptr, member* before = nullptr);
             ~member();
-            member(const member& other):value(other.value), next(std::move(other.next)), before(other.before){}
-            
-            void initializer_member_next(member update);
-
+            void destroy();
+            member(const member& other);
+            member<T>* operator*();
+            void initializer_member_next(member* update);
     };
 
 
@@ -44,39 +41,33 @@ namespace s21
             // typedef ListIterator<T> iterator; // определяет тип итератора
             // typedef ListConstIterator<T> const_iterator; // определяет тип константного итератора
             typedef std::size_t size_type; // определяет тип размера контейнера 
+
             list(); // construtor done
-            // list(size_type n){
-            //     member<T> first(NULL, nullptr, nullptr);
-            //     end = *first;
-            //     for (size_type i = 0; i < n && n > 0; ++i){
-            //         add_New_member();
-            // }
-    // _n = n;
-// } // construtor creates the list of size n
-            // list(std::initializer_list<value_type> const &items); // construtor creates the list listt from the initializer lis
-            // list(const list &l); // copy construtor
-            // list(list &&l); // move construtor
-            // ~list(); // destructor
-            // list &operator=(list &&l); // перегрузка оператора перемещения
+            list(size_type n); // construtor creates the list of size n
+            list(std::initializer_list<value_type> const &items); // construtor creates the list listt from the initializer lis
+            list(const list &l); // copy construtor
+            list(list &&l); // move construtor
+            ~list(); // destructor
+            // operator=(list &&l); // перегрузка оператора перемещения
 
-
-            // // iterator begin();
-            // size_type size(); // возвращает сколько элементов в листе
             
-            void add_New_member(T& value_member = NULL);
 
 
-// size_type max_size(){
-    // member<T> tmp;
-    // return(SIZE_MAX/sizeof(member<value, member>)); // ну пытаюсь получить максимальный размер листа
-// }
+
+            // iterator begin();
+            size_type size(); // возвращает сколько элементов в листе
+            /*ну сделала*/ size_type max_size(); // возвращает сколько всего можно создать элементов в листе
+            T next_el();
+            T get_elenemt();
+            void add_New_member(T value_member = 0);
         private:
             int _n; // колличество элементов 
-            reference begin; //ну думаю что мы знаем что у нас идет первым 
-            reference end; // ну мы же можем знать какой элемент у нас последний да?
+            member<T>* begin; //ну думаю что мы знаем что у нас идет первым 
+            member<T>* end; // ну мы же можем знать какой элемент у нас последний да?
 
     };
 }
+
 
 
 
