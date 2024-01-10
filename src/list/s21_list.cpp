@@ -10,11 +10,13 @@ namespace s21{
 
 
     template <typename T>
-    member<T>::member(T value, std::shared_ptr<member<T>> next, member* before){
-        this->value = value;
-        this->before = before;
-        this->next = next;
-    }
+    member<T>::member(T value, member* next, member* before): next(next), before(before), value(value) {
+                // this = std::make_shared<member>();
+                if (before != NULL) {
+                    before->initializer_member_next(this);
+                }
+            }
+
 
     // template <typename T>
     //  member<T>::member(T value){
@@ -28,17 +30,23 @@ namespace s21{
 
     template <typename T>
     void member<T>::initializer_member_next(member* update) {   
-              next = std::make_shared<member>(update);
+              next = update;
+
             }
 
     template <typename T>
     member<T>::~member(){
-                next = nullptr;
-                before = nullptr;
-                value = 0;
-                
+
+               destroy();               
             };
 
+
+    template <typename T>
+    void member<T>::destroy(){
+      next = nullptr;
+      before = nullptr;
+      value = 0;
+    }
 
 
 
@@ -54,12 +62,17 @@ namespace s21{
     template <typename T>
     list<T>::list(size_type n){
 
-        member<T> first(nullptr, nullptr, nullptr); // 
-        end = &first;
-        for (size_type i = 0; i < n && n > 0; ++i){
-            add_New_member();
-        }
-        _n = n;
+      std::cout<< "create " << 0 << " \n";
+      member<T>* first = new member<T>(0, nullptr, nullptr); 
+      begin = first;
+      end = first;
+      for (size_type i = 1; i < n && n > 0; ++i){
+          add_New_member(i);
+          std::cout<< "create " << i << " \n";
+      }
+      std::cout<< end->value << " end \n";
+      _n = n;
+
     }
    
 
@@ -70,16 +83,26 @@ namespace s21{
 
     template <typename T>
     list<T>::~list(){
-        begin = nullptr;
-        end = nullptr;
+
+        member<T>* tmp = this->begin;
+      while (begin->next != nullptr){
+        tmp = this->begin->next;
+        delete this->begin;
+        this->begin = tmp;
+      }
+        this->begin = nullptr;
+        this->end = nullptr;
+
         _n = 0;
     }
 
 
     template <typename T>
     void list<T>::add_New_member(T value_member){ // создаем члена в конце листа и end теперь указывает на него 
-        member<T>* child_member(value_member, nullptr, &end);
-        end = child_member;
+        std::cout<< end->value << " end \n";
+        member<T>* child_member = new member<T>(value_member, nullptr, end);
+        this->end->next = child_member;
+        this->end = child_member;
     }
 
 
@@ -95,9 +118,18 @@ namespace s21{
         return begin->value;
     }
 
+
+    template <typename T>
+    T list<T>::next_el(){
+      member<T>* tmp = begin->next;
+      std::cout<<begin->value;
+      *this->begin = *tmp;
+      return begin->value;
+    }
+
 }
 int main (){
     s21::list<int> test(3);
-    std:: cout<<test.get_elenemt()<<"\n";
+    std:: cout<<test.get_elenemt()<<"\n"<<test.next_el();
     return 1;
 }
