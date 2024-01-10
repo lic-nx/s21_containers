@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [{ "name": "Debug",
+    "type": "lldb",
+    "request": "launch",
+    "miDebuggerPath": "C:\\Users\\MPK_34\\Desktop\\s21_containers\\src\\list\\a.out",
+    "program": "${workspaceFolder}/src/list/a.out",
+    "args": [],
+    "cwd": "${workspaceFolder}"
+    }]
+   
+}

@@ -93,7 +93,9 @@ namespace s21{
 
     template <typename T>
     list<T>::list(const list &l){
-        
+        if (l._n != 0){
+             /////// need to write
+        }
     }
 
 
@@ -129,24 +131,23 @@ namespace s21{
     // }
 
     template <typename T>
-    T list<T>::get_elenemt(){
+    T list<T>::get_elenemt(){ 
         return now_point->value;
     }
 
 
     template <typename T>
-    T list<T>::next_el(){
+    void list<T>::next_el(){
         if (now_point->next == nullptr){
             throw "Limit of the container is exceeded";
             }
             member<T>* tmp = now_point->next;
             *this->now_point = *tmp;
-      return now_point->value;
     }
 
 
 // сама длбавтила для проверки добавления элемента
-     template <typename T>
+    template <typename T>
     void list<T>::operator()(T value){
         now_point->value = value;
 
@@ -155,6 +156,6 @@ namespace s21{
 }
 int main (){
     s21::list<int> test({1,2,3});
-    std:: cout<<test.get_elenemt()<<"\n"<<test.next_el();
+    std:: cout<<test.get_elenemt()<<"\n"<<test.get_elenemt()();
     return 1;
 }

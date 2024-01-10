@@ -56,7 +56,7 @@ namespace s21
             size_type size(); // возвращает сколько элементов в листе
             /*ну сделала*/ size_type max_size(); // возвращает сколько всего можно создать элементов в листе
 
-            T next_el();
+            void next_el(); // переходим к следующему элементу
             T get_elenemt();
             void add_New_member(T value_member = 0);
             void operator()(T value);
