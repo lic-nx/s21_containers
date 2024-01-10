@@ -2,8 +2,8 @@
 #define S21_LIST_H
 
 #include <iostream> 
-#include <memory>
-// #include <initializer_list> // предоставляет инициализационный список
+// #include <memory>
+#include <initializer_list> // предоставляет инициализационный список
 // #include "s21_iterators.h"
 namespace s21
 {    
@@ -59,12 +59,12 @@ namespace s21
             T next_el();
             T get_elenemt();
             void add_New_member(T value_member = 0);
-
+            void operator()(T value);
         private:
             int _n; // колличество элементов 
             member<T>* begin; //ну думаю что мы знаем что у нас идет первым 
             member<T>* end; // ну мы же можем знать какой элемент у нас последний да?
-
+            member<T>* now_point;
     };
 }
 
