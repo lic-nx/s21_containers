@@ -1,6 +1,12 @@
 #ifndef S21_LIST_H
 #define S21_LIST_H
+/*
+    что еще нужно будет сделать :
+    класс итераторов для typedef ListIterator<T> iterator;
+    typename list<T>::iterator list<T>::end(){ 
+         typename list<T>::iterator list<T>::begin(){ 
 
+*/
 #include <iostream> 
 // #include <memory>
 #include <initializer_list> // предоставляет инициализационный список
@@ -41,21 +47,26 @@ namespace s21
             // typedef ListIterator<T> iterator; // определяет тип итератора
             // typedef ListConstIterator<T> const_iterator; // определяет тип константного итератора
             typedef std::size_t size_type; // определяет тип размера контейнера 
-
             list(); // construtor done
             list(size_type n); // construtor creates the list of size n
             list(std::initializer_list<value_type> const &items); // construtor creates the list listt from the initializer lis
             list(const list &l); // copy construtor
             list(list &&l); // move construtor
             ~list(); // destructor
-            // operator=(list &&l); // перегрузка оператора перемещения
-
-
-
+            void operator=(list &&l); // перегрузка оператора перемещения
+            const_reference front();
+            const_reference back();
             // iterator begin();
+            // iterator end();
+            bool empty();
             size_type size(); // возвращает сколько элементов в листе
-            /*ну сделала*/ size_type max_size(); // возвращает сколько всего можно создать элементов в листе
+            size_type max_size(); // возвращает сколько всего можно создать элементов в листе
+            void clear(); // очищает лист
+            // iterator insert(iterator pos, const_reference value);
 
+            ///////////////////////
+            void move(list &&l);
+            void create_first(T value);
             void next_el(); // переходим к следующему элементу
             T get_elenemt();
             void add_New_member(T value_member = 0);

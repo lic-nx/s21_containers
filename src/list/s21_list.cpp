@@ -62,57 +62,128 @@ namespace s21{
     template <typename T>
     list<T>::list(size_type n){
       member<T>* first = new member<T>(0, nullptr, nullptr); 
-      begin = first;
-      now_point = first;
-      end = first;
+      this->begin = first;
+      this->_n = 1;
+      this->now_point = first;
+      this->end = first;
       for (size_type i = 1; i < n && n > 0; ++i){
           add_New_member();
       }
-      this->_n = n;
 
     }
    
+    template <typename T>
+    void list<T>::create_first(T value){
+         member<T>* first = new member<T>(value, nullptr, nullptr);
+        this->begin = first;
+        this->now_point = first;
+        this->end = first;
+        this->_n = 1;
+    }
 
     template <typename T>
     list<T>::list(std::initializer_list<value_type> const &items){
-        member<T>* first = new member<T>(*(items.begin()), nullptr, nullptr);
-        begin = first;
-        now_point = first;
-        end = first;
+        create_first(*(items.begin()));
         for (auto it = items.begin()+1; it != items.end(); ++it) {
             const auto& item = *it;
             add_New_member(item);
-            // Ваш код для обработки каждого элемента item
         }
-
-        // for(const auto& item : items){
-        //     add_New_member(item);
-        // }
-        this->_n = items.size();
+        
     }
 
     template <typename T>
     list<T>::list(const list &l){
         if (l._n != 0){
-             /////// need to write
+            create_first(l.begin->value);
+            l.now_point = l.begin;
+            while(l.now_point->next != nullptr){
+                add_New_member(l.now_point->value);
+                l.next_el();
+            }
         }
+    }
+
+    template <typename T>
+    list<T>::list(list &&l){
+        move(l); // проверить 
+    }
+
+    template <typename T>
+    void list<T>::move(list &&l){
+        this->begin = l.begin;
+        this->end = l.end;
+        this->now_point = begin;
+        this->_n = l._n;
+        l.begin = nullptr;
+        l.end=nullptr;
+        l.now_point=nullptr;
+        l._n=0;
+    }
+    template <typename T>
+    list<T>::~list(){
+        clear();
     }
 
 
     template <typename T>
-    list<T>::~list(){
+    typename  list<T>::size_type list<T>::size(){
+        return this->_n;
+    }
+
+    template <typename T>
+    bool list<T>::empty(){
+        if (this->_n > 0){
+            return true;
+        }
+        return false;
+    }
+
+    template <typename T>
+    typename  list<T>::size_type list<T>:: max_size(){
+        member<T> tmp;
+        return(SIZE_MAX/sizeof(member<T>)/2); // ну пытаюсь получить максимальный размер листа
+    }
+
+ template <typename T>
+    void list<T>::clear(){
         member<T>* tmp = this->begin;
-      while (begin->next != nullptr){
-        tmp = this->begin->next;
-        delete this->begin;
-        this->begin = tmp;
-      }
+        while (begin->next != nullptr){
+            tmp = this->begin->next;
+            delete this->begin;
+            this->begin = tmp;
+        }
         this->begin = nullptr;
         this->now_point = nullptr;
         this->end = nullptr;
-
         _n = 0;
     }
+
+
+
+// этот блок вызывает вопросы тип а что все такое похожее
+    template <typename T>
+    typename list<T>::const_reference list<T>::front(){ 
+        return this->begin;
+    }
+
+    template <typename T>
+    typename list<T>::const_reference list<T>::back(){ 
+        return this->end;
+    }
+
+
+    // template <typename T>
+    // typename list<T>::iterator list<T>::begin(){ 
+    //     return this->begin;
+    // }
+
+    // template <typename T>
+    // typename list<T>::iterator list<T>::end(){ 
+    //     return this->end;
+    // }
+//////////////////////////////////
+
+
 
 
     template <typename T>
@@ -120,15 +191,8 @@ namespace s21{
         member<T>* child_member = new member<T>(value_member, nullptr, end);
         this->end->next = child_member;
         this->end = child_member;
+        this->_n += 1;
     }
-
-
-
-    // template <typename T>
-    // std::size_t list<T>:: max_size(){
-    //     member<T> tmp;
-    //     return(SIZE_MAX/sizeof(member<value, member>)); // ну пытаюсь получить максимальный размер листа
-    // }
 
     template <typename T>
     T list<T>::get_elenemt(){ 
@@ -153,9 +217,15 @@ namespace s21{
 
     }
 
+    template <typename T>
+    void list<T>::operator=(list &&l){
+        move(l);  // проверить работу
+
+    }
+
 }
 int main (){
     s21::list<int> test({1,2,3});
-    std:: cout<<test.get_elenemt()<<"\n"<<test.get_elenemt()();
+    std:: cout<<test.get_elenemt()<<"\n"<<test.get_elenemt();
     return 1;
 }
