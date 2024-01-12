@@ -47,6 +47,8 @@ namespace s21
             // typedef ListIterator<T> iterator; // определяет тип итератора
             // typedef ListConstIterator<T> const_iterator; // определяет тип константного итератора
             typedef std::size_t size_type; // определяет тип размера контейнера 
+            
+            
             list(); // construtor done
             list(size_type n); // construtor creates the list of size n
             list(std::initializer_list<value_type> const &items); // construtor creates the list listt from the initializer lis
@@ -69,7 +71,8 @@ namespace s21
             void push_front(const_reference value); // добавляет элемент в начало листа
             void pop_front(); // удаление первого элемента
             void swap(list& other);
-            void merge(list& other); 
+            // void merge(list& other); 
+            void splice(const_iterator pos, list& other);
             ///////////////////////
             void move(list &&l);
             void create_first(T value);
