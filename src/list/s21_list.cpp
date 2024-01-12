@@ -53,10 +53,9 @@ namespace s21{
     template <typename T>
     list<T>::list(){
         // T value = NULL;
-        member<T> participant; // создаю пустой член захах
-        begin = &participant; // запоминаем первый элемент
-        now_point = &participant;
-        end = &participant;
+        begin = nullptr; // запоминаем первый элемент
+        now_point = nullptr;
+        end = nullptr;
     }
 
     template <typename T>
@@ -159,6 +158,42 @@ namespace s21{
     }
 
 
+template <typename T>
+    void list<T>::push_back(const_reference value){
+        add_New_member(value);
+    }
+template <typename T>
+    void list<T>::pop_back(){
+        this->end = this->end->before;
+        this->end->next->destroy();  // страшная конструкция
+    }
+
+template <typename T>
+    void list<T>::pop_front(const_reference value){
+        member<T>* new_front = new member<T>(value, this->begin, nullptr);
+        this->begin->before =new_front;
+        this->begin = new_front;
+        
+    }
+
+template <typename T>
+    void list<T>::pop_front(){
+        this->begin = this->begin->next;
+        this->begin->before->destroy();  // страшная конструкция
+    }
+
+    template <typename T>
+    void list<T>::swap(list& other){
+        list<T>* tmp = new();
+        tmp = other;
+        other = *this;
+        *this = tmp; // ну надо будет проверить
+    }
+    
+    template <typename T>
+    void list<T>::merge(list& other){
+        
+    }
 
 // этот блок вызывает вопросы тип а что все такое похожее
     template <typename T>

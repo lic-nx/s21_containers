@@ -62,8 +62,14 @@ namespace s21
             size_type size(); // возвращает сколько элементов в листе
             size_type max_size(); // возвращает сколько всего можно создать элементов в листе
             void clear(); // очищает лист
-            // iterator insert(iterator pos, const_reference value);
-
+            // iterator insert(iterator pos, const_reference value); // добавляет элемент в определенное место и возвращает итератор
+            // void erase(iterator pos); // удаляет элемент по итератору
+            void push_back(const_reference value); // добавляет элемент в конец листа
+            void pop_back(); // удаляет элемент с конца
+            void push_front(const_reference value); // добавляет элемент в начало листа
+            void pop_front(); // удаление первого элемента
+            void swap(list& other);
+            void merge(list& other); 
             ///////////////////////
             void move(list &&l);
             void create_first(T value);
