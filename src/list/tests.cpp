@@ -4,7 +4,6 @@
 
 TEST(ListTest, DefaultConstructor) {
   s21::list<int> my_list;
-  std::cout<<my_list.size();
   EXPECT_EQ(my_list.size(), 0);
   // EXPECT_TRUE(my_list.empty());
 }

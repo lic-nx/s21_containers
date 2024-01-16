@@ -81,9 +81,9 @@ void list<T>::sort(){
 
 }  // namespace s21
 
-int main() {
-  s21::list<int> my_list;
-  std::cout<<my_list.size();
-  std::cout<<"tmthf";
-  return 0;
-}
+// int main() {
+//   s21::list<int> my_list;
+//   std::cout<<my_list.size();
+//   std::cout<<"tmthf";
+//   return 0;
+// }
