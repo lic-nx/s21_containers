@@ -9,7 +9,6 @@ namespace s21 {
   template <typename T>
   class list;
 
-
   template <typename T>
   class member {
     public:
@@ -49,7 +48,9 @@ class ListIterator {
     }
     return this->ptr_->value;
   }
-
+    ListIterator operator=(member<T>* ptr) { // это добавила 
+    ptr_ = ptr;
+  }
   ListIterator operator++(int) {
     ptr_ = ptr_->next;
     return *this;
@@ -255,6 +256,10 @@ class list {
 
   void merge(list& other);
   void splice(const_iterator pos, list& other);
+
+  void reverse();
+  void unique(); // после реализации сортировки 
+  void sort();
   ///////////////////////
 
   void move(list&& l) {
