@@ -20,7 +20,7 @@ namespace s21 {
       this->before = nullptr;
       this->next = nullptr;
     };
-    member(T value, member* next, member* before)
+    member(T value, member* next=nullptr, member* before=nullptr)
         : next(next), before(before), value(value){}
     member(const member& other)
         : value(other.value), next(std::move(other.next)), before(other.before){}
@@ -28,9 +28,9 @@ namespace s21 {
     ~member() { destroy(); }
 
     void destroy() {
-      next = nullptr;
-      before = nullptr;
-      value = 0;
+      this->next = nullptr;
+      this->before = nullptr;
+      this->value = 0;
     }
   };
 
@@ -130,7 +130,7 @@ class list {
   }
 
   list(size_type n) {
-    member<T>* first = new member<T>(0, nullptr, nullptr);
+    member<T>* first = new member<T>(0);
     this->begin_member = first;
     this->_n = 1;
     this->now_point = first;
@@ -205,18 +205,19 @@ class list {
   };  // возвращает сколько всего можно создать элементов в листе
 
   void clear() {
-    if(!empty()){
-    member<T>* tmp = this->begin_member;
-    while (begin_member->next != nullptr) {
-      tmp = this->begin_member->next;
-      this->begin_member->destroy();
-      this->begin_member = tmp;
-    }
-    this->begin_member = nullptr;
-    this->now_point = nullptr;
-    this->end_member = nullptr;
-    _n = 0;
-    tmp->destroy();
+    if(!this->empty())
+    {
+        member<T>* tmp = this->begin_member;
+        while (tmp != nullptr) {
+            tmp = this->begin_member->next;
+            this->begin_member->destroy();
+            this->begin_member = tmp;
+        }
+        this->begin_member = nullptr;
+        this->now_point = nullptr;
+        this->end_member = nullptr;
+        _n = 0;
+        tmp=nullptr;
     }
   }
 
