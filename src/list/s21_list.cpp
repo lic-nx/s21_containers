@@ -76,13 +76,14 @@ void list<T>::reverse() { // может стопаться из-за перво�
 
 template <typename T>
 void list<T>::sort(){
-  
+
 }
 
 }  // namespace s21
 
 int main() {
-  s21::list<int> test({1, 2, 3});
-  std::cout << test.get_elenemt() << "\n" << test.get_elenemt();
-  return 1;
+  s21::list<int> my_list;
+  std::cout<<my_list.size();
+  std::cout<<"tmthf";
+  return 0;
 }

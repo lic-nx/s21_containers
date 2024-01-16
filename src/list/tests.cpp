@@ -2,25 +2,13 @@
 
 #include "s21_list.h"
 
-TEST(VectorTest, Constructor_initializer_list_1) {
-  s21::list<int> A(2);
-  A(3);
-
-  EXPECT_EQ(3, A.get_elenemt);
+TEST(ListTest, DefaultConstructor) {
+  s21::list<int> my_list;
+  std::cout<<my_list.size();
+  EXPECT_EQ(my_list.size(), 0);
+  // EXPECT_TRUE(my_list.empty());
 }
 
-TEST(VectorTest, Constructor_initializer_list_2) {
-  s21::list<int> test({1, 2, 3});
-  // std:: cout<<test.get_elenemt()<<"\n"<<test.next_el();
-
-  EXPECT_EQ(1, A.get_elenemt);
-  A.next_el();
-  EXPECT_EQ(2, A.get_elenemt());
-  A.next_el() EXPECT_EQ(3, A.get_elenemt());
-}
-
-s21::list<int> test({1, 2, 3});
-std::cout << test.get_elenemt() << "\n" << test.next_el();
 
 int main(int argc, char* argv[]) {
   testing::InitGoogleTest(&argc, argv);

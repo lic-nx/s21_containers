@@ -126,11 +126,7 @@ class list {
   // итератора
   typedef std::size_t size_type;  // определяет тип размера контейнера
 
-  list() {
-    begin_member = nullptr;  // запоминаем первый элемент
-    now_point = nullptr;
-    end_member = nullptr;
-    _n = 0;
+  list(): begin_member(nullptr),now_point(nullptr),end_member(nullptr), _n(0){
   }
 
   list(size_type n) {
@@ -209,16 +205,19 @@ class list {
   };  // возвращает сколько всего можно создать элементов в листе
 
   void clear() {
+    if(!empty()){
     member<T>* tmp = this->begin_member;
     while (begin_member->next != nullptr) {
       tmp = this->begin_member->next;
-      delete this->begin_member;
+      this->begin_member->destroy();
       this->begin_member = tmp;
     }
     this->begin_member = nullptr;
     this->now_point = nullptr;
     this->end_member = nullptr;
     _n = 0;
+    tmp->destroy();
+    }
   }
 
   // очищает лист
@@ -232,6 +231,7 @@ class list {
   void pop_back() {
     this->end_member = this->end_member->before;
     this->end_member->next->destroy();  // страшная конструкция
+    this->_n -= 1;
   }  // удаляет элемент с конца
 
   void push_front(const_reference value) {
@@ -244,6 +244,7 @@ class list {
     {
       this->begin_member = this->begin_member->next;
       this->begin_member->before->destroy();  // страшная конструкция
+      this->_n -= 1;
     }
   }  // удаление первого элемента
 
@@ -302,7 +303,7 @@ class list {
   void operator()(T value) { now_point->value = value; }
 
  private:
-  int _n;  // колличество элементов
+  size_type _n;  // колличество элементов
   member<T>* begin_member;  //ну думаю что мы знаем что у нас идет первым
   member<T>*
       end_member;  // ну мы же можем знать какой элемент у нас последний да?
