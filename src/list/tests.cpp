@@ -1,13 +1,33 @@
 #include <gtest/gtest.h>
-
+#include <list>
 #include "s21_list.h"
 
 TEST(ListTest, DefaultConstructor) {
   s21::list<int> my_list;
   EXPECT_EQ(my_list.size(), 0);
-  // EXPECT_TRUE(my_list.empty());
+  EXPECT_TRUE(my_list.empty());
 }
 
+TEST(ListTest, DefaultConstructor2) {
+  s21::list<int> my_list(3);
+  EXPECT_EQ(my_list.size(), 3);
+  EXPECT_TRUE(!my_list.empty());
+}
+
+TEST(ListTest, CompareLists) {
+  s21::list<int> my_list{1, 2, 3, 4, 5};
+  my_list.push_front(0);
+  EXPECT_EQ(my_list.get_elenemt(),0);
+  int i = 0;
+  for (auto iter =  my_list.begin(); iter !=  my_list.end(); iter++)
+    {
+      EXPECT_EQ(*iter,i);
+      i++;
+    }
+  my_list.next_el();
+  EXPECT_EQ(my_list.get_elenemt(),1);
+  EXPECT_EQ(my_list.size(),6);
+}
 
 int main(int argc, char* argv[]) {
   testing::InitGoogleTest(&argc, argv);

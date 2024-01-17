@@ -22,6 +22,7 @@ namespace s21 {
     };
     member(T value, member* next=nullptr, member* before=nullptr)
         : next(next), before(before), value(value){}
+
     member(const member& other)
         : value(other.value), next(std::move(other.next)), before(other.before){}
     
@@ -130,14 +131,16 @@ class list {
   }
 
   list(size_type n) {
-    member<T>* first = new member<T>(0);
+    member<T>* first = new member<T>(1, nullptr, nullptr);
     this->begin_member = first;
     this->_n = 1;
     this->now_point = first;
     this->end_member = first;
     for (size_type i = 1; i < n && n > 0; ++i) {
-      add_New_member();
+      add_New_member(0);
     }
+    first = nullptr;
+    delete(first);
   }  // construtor creates the list of size n
 
   list(std::initializer_list<value_type> const& items) {
@@ -178,20 +181,20 @@ class list {
 
 
   iterator begin(){
-    ListIterator<T> ptr = new ListIterator(this->begin_member);
+    ListIterator<T> ptr(this->begin_member);
     return ptr;
 }
   iterator end(){
-    ListIterator<T> ptr = new ListIterator(this->end_member);
+    ListIterator<T> ptr(this->end_member);
     return ptr;
 }
 
 
   bool empty() {
     if (this->_n > 0) {
-      return true;
+      return false;
     }
-    return false;
+    return true;
   };
 
   size_type size() {
@@ -218,6 +221,7 @@ class list {
         this->end_member = nullptr;
         _n = 0;
         tmp=nullptr;
+        delete(tmp);
     }
   }
 
@@ -239,6 +243,8 @@ class list {
     member<T>* new_front = new member<T>(value, this->begin_member, nullptr);
     this->begin_member->before = new_front;
     this->begin_member = new_front;
+    this->now_point = new_front;
+    this->_n++;
   }  // добавляет элемент в начало листа
 
   void pop_front() {
@@ -299,6 +305,8 @@ class list {
     this->end_member->next = child_member;
     this->end_member = child_member;
     this->_n += 1;
+    child_member=nullptr;
+    delete(child_member);
   }
 
   void operator()(T value) { now_point->value = value; }
