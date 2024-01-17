@@ -29,6 +29,22 @@ TEST(ListTest, CompareLists) {
   EXPECT_EQ(my_list.size(),6);
 }
 
+
+TEST(ListTest, CompareLists1) {
+  s21::list<int> my_list{1, 2, 3, 4, 5};
+  s21::list<int> my_list2(my_list);
+   my_list2.push_front(0);
+  EXPECT_EQ(my_list2.get_elenemt(),0);
+  int i = 0;
+  for (auto iter =  my_list2.begin(); iter !=  my_list2.end(); iter++)
+    {
+      EXPECT_EQ(*iter,i);
+      i++;
+    }
+
+  EXPECT_EQ(my_list2.size(),6);
+}
+
 int main(int argc, char* argv[]) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

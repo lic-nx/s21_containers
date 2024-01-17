@@ -131,17 +131,12 @@ class list {
   }
 
   list(size_type n) {
-    member<T>* first = new member<T>(1, nullptr, nullptr);
-    this->begin_member = first;
-    this->_n = 1;
-    this->now_point = first;
-    this->end_member = first;
+    create_first();
     for (size_type i = 1; i < n && n > 0; ++i) {
       add_New_member(0);
     }
-    first = nullptr;
-    delete(first);
   }  // construtor creates the list of size n
+
 
   list(std::initializer_list<value_type> const& items) {
     create_first(*(items.begin()));
@@ -151,18 +146,33 @@ class list {
     }
   }  // construtor creates the list listt from the initializer lis
 
+
+
   list(const list& l) {
     if (l._n != 0) {
-      create_first(l.begin_member->value);
-      l.now_point = l.begin_member;
-      while (l.now_point->next != nullptr) {
-        add_New_member(l.now_point->value);
-        l.next_el();
+      list<T> tmp;
+      tmp.begin_member = l.begin_member;
+      tmp.end_member = l.end_member;
+      tmp._n = l._n;
+      this->create_first(tmp.begin_member->value);
+      // tmp.begin_member=tmp.begin_member->next;
+      for (auto iter = tmp.begin()++; iter !=  nullptr; iter++)
+      {
+        const auto& item = *iter;
+        this->add_New_member(item);
       }
+       tmp.begin_member = nullptr;
+    tmp.end_member = nullptr;
+    tmp.now_point = nullptr;
+    tmp._n = 0;
     }
   };  // copy construtor
 
-  list(list&& l) { move(l); }
+
+
+
+  list(list&& l) { move(l); 
+  null_elements( l);}
 
   ~list() { clear(); }  // destructor
 
@@ -270,23 +280,33 @@ class list {
   void sort();
   ///////////////////////
 
-  void move(list&& l) {
+  void move(list l) {
     this->begin_member = l.begin_member;
     this->end_member = l.end_member;
     this->now_point = begin_member;
     this->_n = l._n;
+    
+  };
+
+  void null_elements(list&& l){
     l.begin_member = nullptr;
     l.end_member = nullptr;
     l.now_point = nullptr;
     l._n = 0;
-  };
+  }
+  
+  T return_last(){
+    return this->end_member->value;
+  }
 
-  void create_first(T value) {
+  void create_first(T value = 0) {
     member<T>* first = new member<T>(value, nullptr, nullptr);
     this->begin_member = first;
     this->now_point = first;
     this->end_member = first;
     this->_n = 1;
+    first = nullptr;
+    delete(first);
   }
 
   void next_el() {
