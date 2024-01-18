@@ -148,7 +148,7 @@ class list {
 
 
 
-  list(const list& l) {
+  list(const list& l) { // можно и лучше так то 
     if (l._n != 0) {
       list<T> tmp;
       tmp.begin_member = l.begin_member;
@@ -172,6 +172,7 @@ class list {
 
 
   list(list&& l) { move(l); 
+  
   null_elements( l);}
 
   ~list() { clear(); }  // destructor
