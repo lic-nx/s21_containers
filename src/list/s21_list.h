@@ -10,30 +10,33 @@ namespace s21 {
   class list;
 
   template <typename T>
-  class member {
-    public:
-    T value;
-    member<T>* next;
-    member<T>* before;
+class member {
+public:
     member() {
-      this->value = 0;
-      this->before = nullptr;
-      this->next = nullptr;
+        this->value = 0;
+        this->next = nullptr;
+        this->before = nullptr;
     };
+
     member(T value, member* next=nullptr, member* before=nullptr)
-        : next(next), before(before), value(value){}
+        : value(value), next(next), before(before){}
 
     member(const member& other)
-        : value(other.value), next(std::move(other.next)), before(other.before){}
+        : value(other.value), next(std::move(other.next)), before(other.before) {}
     
     ~member() { destroy(); }
 
     void destroy() {
-      this->next = nullptr;
-      this->before = nullptr;
-      this->value = 0;
+        this->next = nullptr;
+        this->before = nullptr;
+        this->value = 0;
     }
-  };
+
+    T value;
+    member<T>* next;
+    member<T>* before;
+
+};
 
 
 
@@ -222,17 +225,17 @@ class list {
     if(!this->empty())
     {
         member<T>* tmp = this->begin_member;
-        while (tmp != nullptr) {
+        while (this->begin_member != nullptr) {
             tmp = this->begin_member->next;
-            this->begin_member->destroy();
+            delete this->begin_member;
             this->begin_member = tmp;
+            this->_n--;
         }
         this->begin_member = nullptr;
         this->now_point = nullptr;
         this->end_member = nullptr;
-        _n = 0;
-        tmp=nullptr;
-        delete(tmp);
+        this->_n = 0;
+        tmp = nullptr;
     }
   }
 
@@ -306,38 +309,35 @@ class list {
     this->now_point = first;
     this->end_member = first;
     this->_n = 1;
-    first = nullptr;
-    delete(first);
   }
 
   void next_el() {
     if (now_point->next == nullptr) {
       throw "Limit of the container is exceeded";
     }
-    member<T>* tmp = now_point->next;
-    *this->now_point = *tmp;
+    // member<T>* tmp = this->now_point->next;
+    this->now_point = this->now_point->next;
   };  // переходим к следующему элементу
 
   T get_elenemt() { return now_point->value; }
 
   void add_New_member(T value_member = 0) {  // создаем члена в конце листа и
                                              // end теперь указывает на него
-    member<T>* child_member = new member<T>(value_member, nullptr, end_member);
-    this->end_member->next = child_member;
-    this->end_member = child_member;
+    this->end_member->next = new member<T>(value_member, nullptr, this->end_member);
+    this->end_member->next->before = this->end_member;
+    this->end_member = this->end_member->next;
+
     this->_n += 1;
-    child_member=nullptr;
-    delete(child_member);
   }
 
   void operator()(T value) { now_point->value = value; }
 
  private:
-  size_type _n;  // колличество элементов
   member<T>* begin_member;  //ну думаю что мы знаем что у нас идет первым
+   member<T>* now_point;
   member<T>*
       end_member;  // ну мы же можем знать какой элемент у нас последний да?
-  member<T>* now_point;
+  size_type _n;  // колличество элементов
 };
 }  // namespace s21
 
