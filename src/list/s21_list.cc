@@ -62,7 +62,25 @@ void list<T>::reverse() { // может стопаться из-за перво�
 
 template <typename T>
 void list<T>::sort(){
+}
 
+
+template <typename T>
+void list<T>::recursSort(){
+  if (mainList->_n > 1){
+    list<T> leftList;
+    list<T> rightList;
+    for (int i = 0 ; i < mainList->_n; i++){
+      if (i < mainList->_n /2){
+        leftList.add_New_member(mainList->value); // сомнения по поводу этой тоски 
+      } 
+      else {
+        rightList.add_New_member(mainList->value);
+      }
+    }
+  }
+  
+  
 }
 
 }  // namespace s21

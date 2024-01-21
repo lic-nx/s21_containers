@@ -263,7 +263,7 @@ class list {
     this->_n++;
   }  // добавляет элемент в начало листа
 
-  void pop_front() {
+  void pop_front() { // done
     {
       this->begin_member = this->begin_member->next;
       this->begin_member->before->destroy();  // страшная конструкция
@@ -332,15 +332,20 @@ class list {
 
   void add_New_member(T value_member = 0) {  // создаем члена в конце листа и
                                              // end теперь указывает на него
+    if(this->_n > 1){
     this->end_member->next = new member<T>(value_member, nullptr, this->end_member);
     this->end_member->next->before = this->end_member;
     this->end_member = this->end_member->next;
-
-    this->_n += 1;
+     this->_n += 1;
+    }
+    else{
+      create_first(value_member);
+    }
+   
   }
 
   void operator()(T value) { now_point->value = value; }
-
+  void recursSort();
  private:
   member<T>* begin_member;  //ну думаю что мы знаем что у нас идет первым
    member<T>* now_point;
