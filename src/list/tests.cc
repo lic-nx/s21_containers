@@ -30,37 +30,6 @@ TEST(ListTest, CompareLists) {
 }
 
 
-TEST(ListTest, CompareLists1) {
-  s21::list<int> my_list{1, 2, 3, 4, 5};
-  s21::list<int> my_list2(my_list);
-   my_list2.push_front(0);
-  EXPECT_EQ(my_list2.get_elenemt(),0);
-  int i = 0;
-  for (auto iter =  my_list2.begin(); iter !=  my_list2.end(); iter++)
-    {
-      EXPECT_EQ(*iter,i);
-      i++;
-    }
-
-  EXPECT_EQ(my_list2.size(),6);
-}
-
-TEST(ListTest, moveTest) {
-  s21::list<int> my_list{1, 2, 3, 4, 5};
-  s21::list<int> my_list2(my_list);
-   my_list2.push_front(0);
-  EXPECT_EQ(my_list2.get_elenemt(),0);
-  int i = 0;
-  for (auto iter =  my_list2.begin(); iter !=  my_list2.end(); iter++)
-    {
-      EXPECT_EQ(*iter,i);
-      i++;
-    }
-
-  EXPECT_EQ(my_list2.size(),6);
-}
-
-
 TEST(ListTest, moveTest2) {
   s21::list<int> my_list{1, 2, 3, 4, 5};
   s21::list<int> my_list2 = my_list;
@@ -76,6 +45,20 @@ TEST(ListTest, moveTest2) {
 
   EXPECT_EQ(my_list2.size(),6);
 }
+
+
+TEST(ListTest, first) {
+  s21::list<int> my_list{1, 2, 3, 4, 5};
+  my_list.push_back(6);
+  EXPECT_EQ(my_list.back(),6);
+  my_list.pop_back();
+  EXPECT_EQ(my_list.back(),5);
+  my_list.pop_front();
+  EXPECT_EQ(my_list.front(),2);
+}
+
+
+
 
 int main(int argc, char* argv[]) {
   testing::InitGoogleTest(&argc, argv);

@@ -18,20 +18,6 @@ typename list<T>::iterator insert(typename list<T>::iterator pos, typename list<
 }
 
 template <typename T>
-void list<T>::splice(const_iterator pos, list& other) {
-  if (!other.empty()) {
-    for (iterator it = other.begin(); it != other.end(); ++it) {
-      this->insert(pos, *it);
-    }
-    other.clear();
-  }
-}
-
-
-
-
-
-template <typename T>
 void list<T>::merge(list& other) {
   list<T> tmp_list = new list<T>(1);
   ListIterator<T> iter = new ListIterator<T>(this->begin);

@@ -132,8 +132,9 @@ class list {
 
   list(): begin_member(nullptr),now_point(nullptr),end_member(nullptr), _n(0){
   }
+// сделано 
 
-  list(size_type n) {
+  list(size_type n) { // done
     create_first();
     for (size_type i = 1; i < n && n > 0; ++i) {
       add_New_member(0);
@@ -141,7 +142,7 @@ class list {
   }  // construtor creates the list of size n
 
 
-  list(std::initializer_list<value_type> const& items) {
+  list(std::initializer_list<value_type> const& items) { // done
     create_first(*(items.begin()));
     for (auto it = items.begin() + 1; it != items.end(); ++it) {
       const auto& item = *it;
@@ -151,7 +152,7 @@ class list {
 
 
 
-  list(const list& l) { // можно и лучше так то 
+  list(const list& l) { // можно и лучше так то // done
     if (l._n != 0) {
       list<T> tmp;
       tmp.begin_member = l.begin_member;
@@ -186,32 +187,32 @@ class list {
 
 
   const_reference front(){
-  return this->begin_member;
+  return this->begin_member->value; //не уверена что именно такое возвращаем
 }
 
   const_reference back(){
-  return this->end_member;
+  return this->end_member->value; // не уверена
 }
 
 
-  iterator begin(){
+  iterator begin(){ // done
     ListIterator<T> ptr(this->begin_member);
     return ptr;
 }
-  iterator end(){
+  iterator end(){ // done
     ListIterator<T> ptr(this->end_member);
     return ptr;
 }
 
 
-  bool empty() {
+  bool empty() { // done
     if (this->_n > 0) {
       return false;
     }
     return true;
   };
 
-  size_type size() {
+  size_type size() { // done
     return this->_n;
   };  // возвращает сколько элементов в листе
 
@@ -221,7 +222,8 @@ class list {
             2);  // ну пытаюсь получить максимальный размер листа
   };  // возвращает сколько всего можно создать элементов в листе
 
-  void clear() {
+
+  void clear() { // done
     if(!this->empty())
     {
         member<T>* tmp = this->begin_member;
@@ -243,17 +245,17 @@ class list {
   // iterator insert(iterator pos, const_reference value); // добавляет элемент
   // в определенное место и возвращает итератор void erase(iterator pos); //
   // удаляет элемент по итератору
-  void push_back(const_reference value) {
+  void push_back(const_reference value) { // done
     add_New_member(value);
   }  // добавляет элемент в конец листа
 
-  void pop_back() {
+  void pop_back() { // done
     this->end_member = this->end_member->before;
     this->end_member->next->destroy();  // страшная конструкция
     this->_n -= 1;
   }  // удаляет элемент с конца
 
-  void push_front(const_reference value) {
+  void push_front(const_reference value) { // done
     member<T>* new_front = new member<T>(value, this->begin_member, nullptr);
     this->begin_member->before = new_front;
     this->begin_member = new_front;
@@ -277,7 +279,14 @@ class list {
   };
 
   void merge(list& other);
-  void splice(const_iterator pos, list& other);
+  void splice(const_iterator pos, list& other){
+  if (!other.empty()) {
+    for (iterator it = other.begin(); it != other.end(); ++it) {
+      this->insert(pos, *it);
+    }
+    other.clear();
+  }
+}
 
   void reverse();
   void unique(); // после реализации сортировки 
@@ -311,7 +320,7 @@ class list {
     this->_n = 1;
   }
 
-  void next_el() {
+  void next_el() { // done
     if (now_point->next == nullptr) {
       throw "Limit of the container is exceeded";
     }
@@ -319,7 +328,7 @@ class list {
     this->now_point = this->now_point->next;
   };  // переходим к следующему элементу
 
-  T get_elenemt() { return now_point->value; }
+  T get_elenemt() { return now_point->value; } // done
 
   void add_New_member(T value_member = 0) {  // создаем члена в конце листа и
                                              // end теперь указывает на него
