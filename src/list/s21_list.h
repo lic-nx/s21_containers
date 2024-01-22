@@ -332,7 +332,7 @@ class list {
 
   void add_New_member(T value_member = 0) {  // создаем члена в конце листа и
                                              // end теперь указывает на него
-    if(this->_n > 1){
+    if(this->_n > 0){
     this->end_member->next = new member<T>(value_member, nullptr, this->end_member);
     this->end_member->next->before = this->end_member;
     this->end_member = this->end_member->next;
@@ -345,7 +345,7 @@ class list {
   }
 
   void operator()(T value) { now_point->value = value; }
-  void recursSort();
+  void recursSort(list& mainList);
  private:
   member<T>* begin_member;  //ну думаю что мы знаем что у нас идет первым
    member<T>* now_point;

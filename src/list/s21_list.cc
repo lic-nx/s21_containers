@@ -66,8 +66,8 @@ void list<T>::sort(){
 
 
 template <typename T>
-void list<T>::recursSort(){
-  if (mainList->_n > 1){
+void list<T>::recursSort(list& mainList){
+  if (mainList->max_size() > 1){
     list<T> leftList;
     list<T> rightList;
     for (int i = 0 ; i < mainList->_n; i++){
