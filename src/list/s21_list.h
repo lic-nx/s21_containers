@@ -294,13 +294,13 @@ class list {
 
 
 void merge(list& other) {
-  other->now_point = other->begin_member;
-  while (other->now_point->next != nullptr && this->now_point->next != nullptr)
-  {
-    if ()
-    /* code */
+  iterator ptr_this = this->begin();
+  iterator ptr_other = other->begin();
+  while (!other.empty()){
+    if(!this->empty()){
+
+    }
   }
-  
 
 
   // merge_two_lists(*this, other); // 
@@ -350,13 +350,13 @@ void merge(list& other) {
 
   
 void merge_two_lists(list& left, list& right) {
-  // list<T>* tmp_list = new list<T>(1);
-  ListIterator<T> iter = left.begin();
-  ListIterator<T> iter_other = right.begin();
-  while(iter_other!=nullptr){
+  list<T>* tmp_list = new list<T>(1);
+  iterator iter = left->begin();
+  iterator iter_other = right->begin();
+  while(left->begin_member->next!=nullptr && right->begin_member->next!=nullptr){
     if (iter.ptr_->value > iter_other.ptr_->value){
-      insert(iter, iter_other.ptr_->value);
-      right.pop_front();
+      tmp_list->insert();
+
     }
     else if(iter.ptr_->value <= iter_other.ptr_->value && iter.ptr_->next!=nullptr){
       iter++;
@@ -372,6 +372,7 @@ void merge_two_lists(list& left, list& right) {
       insert(iter, iter_other.ptr_->value);
       iter_other++;
     }
+    tmp_list->_n +=1;
   }
 
 }
