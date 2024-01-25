@@ -2,45 +2,9 @@
 // #include "../s21_iterators.h"
 namespace s21 {
 
-template <typename T>
-typename list<T>::iterator insert(typename list<T>::iterator pos, typename list<T>::const_reference value){
-  member<T>* tmp_member = new member<T>(value);
-  if (pos._ptr->next ==nullptr){
-    pos._ptr.add_New_member(tmp_member); // настроить ссылки обратно и настроить _n у листа 
-  }
-  else{
-    tmp_member.before = pos._ptr;
-    pos._ptr->next->before = tmp_member;
-    tmp_member.next = pos._ptr->next;
-    pos._ptr->next = tmp_member; // хуйня но ладно
-  }
-  
-}
 
-template <typename T>
-void list<T>::merge(list& other) {
-  list<T> tmp_list = new list<T>(1);
-  ListIterator<T> iter = new ListIterator<T>(this->begin);
-  ListIterator<T> iter_other = new ListIterator<T>(other->begin);
-  while(iter_other!=nullptr){
-    if (iter->next == nullptr || iter->value > iter_other->value){
-      iter = insert(iter, iter_other->value);
-      iter_other++;
-    }
-    else if(iter->value <= iter_other->value){
-      iter++;
-    }
-    else{
-      iter--;
-      iter = insert(iter, iter_other->value);
-      iter_other++;
-    }
 
-  }
-  if(iter_other!=nullptr){
-    iter = insert(iter, iter_other->value);
-  }
-}
+
 
 
 template <typename T>
@@ -66,8 +30,11 @@ void list<T>::sort(){
 
 
 template <typename T>
-void list<T>::recursSort(list& mainList){
-  if (mainList->max_size() > 1){
+int list<T>::recursSort(list& mainList){
+  if(mainList->size() <=1){
+    return 1;
+  }
+  if (mainList->size() > 1){
     list<T> leftList;
     list<T> rightList;
     for (int i = 0 ; i < mainList->_n; i++){
@@ -78,6 +45,9 @@ void list<T>::recursSort(list& mainList){
         rightList.add_New_member(mainList->value);
       }
     }
+     merge_two_lists(recursSort(leftList), recursSort(rightList)) ;
+    mainList->begin_member = leftList->begin_member;
+
   }
   
   

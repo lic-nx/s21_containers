@@ -57,8 +57,36 @@ TEST(ListTest, first) {
   EXPECT_EQ(my_list.front(),2);
 }
 
+TEST(ListTest,  insert) {
+  s21::list<int> our_list= {1,2,3};
+  std::list<int> std_list = {1,2,3};
+  s21::list<int>::iterator our_it;
+  our_it = our_list.begin();
+  std::list<int>::iterator std_it;
+  std_it = std_list.begin();
+  our_list.insert(our_it, 5);
+  std_list.insert(std_it, 5);
+  EXPECT_EQ(our_list.front(), std_list.front());
+  EXPECT_EQ(our_list.back(), std_list.back());
+  our_list.insert(our_it, 7);
+  std_list.insert(std_it, 7);
+  our_list.insert(our_it, 9);
+  std_list.insert(std_it, 9);
+  EXPECT_EQ(our_list.front(), std_list.front());
+  EXPECT_EQ(our_list.back(), std_list.back());
+}
 
-
+TEST(List, Merge) {
+  s21::list<int> our_list_first = {1};
+  s21::list<int> our_list_second = {2, 3, 4, 5};
+  std::list<int> std_list_first = {1};
+  std::list<int> std_list_second = {2, 3, 4, 5};
+  our_list_first.merge(our_list_second);
+  std_list_first.merge(std_list_second);
+  EXPECT_EQ(our_list_first.front(), std_list_first.front());
+  EXPECT_EQ(our_list_first.back(), std_list_first.back());
+  EXPECT_EQ(our_list_second.empty(), std_list_second.empty());
+}
 
 int main(int argc, char* argv[]) {
   testing::InitGoogleTest(&argc, argv);

@@ -242,10 +242,24 @@ class list {
   }
 
   // очищает лист
-  // iterator insert(iterator pos, const_reference value); // добавляет элемент
+  iterator insert( iterator pos,  const_reference value){
+  member<T>* tmp_member = new member<T>(value);
+  if (pos.ptr_->before == nullptr){
+    pos.ptr_->before = tmp_member; // настроить ссылки обратно и настроить _n у листа 
+    tmp_member->next = pos.ptr_; // сомнения что это работает 
+    this->begin_member = tmp_member; // выглядит как костыль 
+  }
+  else{
+    tmp_member->next = pos.ptr_;
+    tmp_member->before = pos.ptr_->before->next;
+    pos.ptr_->before->next = tmp_member;
+    pos.ptr_->before = tmp_member;
+  }
+  return pos;
+  }// добавляет элемент
   // в определенное место и возвращает итератор void erase(iterator pos); //
   // удаляет элемент по итератору
-  void push_back(const_reference value) { // done
+  void push_back(const_reference value) { // done 
     add_New_member(value);
   }  // добавляет элемент в конец листа
 
@@ -278,7 +292,33 @@ class list {
     *this = tmp;  // ну надо будет проверить
   };
 
-  void merge(list& other);
+
+void merge(list& other) {
+  other->now_point = other->begin_member;
+  while (other->now_point->next != nullptr && this->now_point->next != nullptr)
+  {
+    if ()
+    /* code */
+  }
+  
+
+
+  // merge_two_lists(*this, other); // 
+  // while (this->begin_member->before!=nullptr)
+  // {
+  //   this->begin_member = this->begin_member->before;
+  //   /* code */
+  // }
+  // while (this->end_member->next!=nullptr)
+  // {
+  //   this->end_member = this->end_member->next;
+  //   /* code */
+  // }
+  
+}
+
+
+
   void splice(const_iterator pos, list& other){
   if (!other.empty()) {
     for (iterator it = other.begin(); it != other.end(); ++it) {
@@ -307,10 +347,34 @@ class list {
     l.now_point = nullptr;
     l._n = 0;
   }
+
   
-  T return_last(){
-    return this->end_member->value;
+void merge_two_lists(list& left, list& right) {
+  // list<T>* tmp_list = new list<T>(1);
+  ListIterator<T> iter = left.begin();
+  ListIterator<T> iter_other = right.begin();
+  while(iter_other!=nullptr){
+    if (iter.ptr_->value > iter_other.ptr_->value){
+      insert(iter, iter_other.ptr_->value);
+      right.pop_front();
+    }
+    else if(iter.ptr_->value <= iter_other.ptr_->value && iter.ptr_->next!=nullptr){
+      iter++;
+    }
+    else  if(iter.ptr_->next!=nullptr)
+    {
+      iter.ptr_->next = iter_other.ptr_;
+      iter_other.ptr_->before = iter.ptr_;
+      break;
+    }
+    
+    else{
+      insert(iter, iter_other.ptr_->value);
+      iter_other++;
+    }
   }
+
+}
 
   void create_first(T value = 0) {
     member<T>* first = new member<T>(value, nullptr, nullptr);
@@ -345,7 +409,7 @@ class list {
   }
 
   void operator()(T value) { now_point->value = value; }
-  void recursSort(list& mainList);
+  int recursSort(list& mainList);
  private:
   member<T>* begin_member;  //ну думаю что мы знаем что у нас идет первым
    member<T>* now_point;
