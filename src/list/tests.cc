@@ -76,7 +76,7 @@ TEST(ListTest,  insert) {
   EXPECT_EQ(our_list.back(), std_list.back());
 }
 
-TEST(List, Merge) {
+TEST(ListTest, Merge) {
   s21::list<int> our_list_first = {1};
   s21::list<int> our_list_second = {2, 3, 4, 5};
   std::list<int> std_list_first = {1};
@@ -86,6 +86,41 @@ TEST(List, Merge) {
   EXPECT_EQ(our_list_first.front(), std_list_first.front());
   EXPECT_EQ(our_list_first.back(), std_list_first.back());
   EXPECT_EQ(our_list_second.empty(), std_list_second.empty());
+}
+
+TEST(ListTest, Reverse) {
+  s21::list<int> our_list = {1, 2, 3, 4, 5};
+  std::list<int> std_list = {1, 2, 3, 4, 5};
+  our_list.reverse();
+  std_list.reverse();
+  EXPECT_EQ(our_list.front(), std_list.front());
+  EXPECT_EQ(our_list.back(), std_list.back());
+}
+
+TEST(ListTest, Sort) {
+  s21::list<int> our_list = {2, 4, 1, 3, 5};
+  std::list<int> std_list = {2, 4, 1, 3, 5};
+  s21::list<int>::iterator our_it;
+  std::list<int>::iterator std_it;
+
+  our_list.sort();
+  std_list.sort();
+  EXPECT_EQ(our_list.front(), std_list.front());
+  our_it = our_list.begin();
+  std_it = std_list.begin();
+  EXPECT_EQ(*our_it, *std_it);
+  ++our_it;
+  ++std_it;
+  EXPECT_EQ(*our_it, *std_it);
+  ++our_it;
+  ++std_it;
+  EXPECT_EQ(*our_it, *std_it);
+  ++our_it;
+  ++std_it;
+  EXPECT_EQ(*our_it, *std_it);
+  ++our_it;
+  ++std_it;
+  EXPECT_EQ(*our_it, *std_it);
 }
 
 int main(int argc, char* argv[]) {

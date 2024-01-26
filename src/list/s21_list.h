@@ -165,19 +165,17 @@ class list {
         const auto& item = *iter;
         this->add_New_member(item);
       }
-       tmp.begin_member = nullptr;
-    tmp.end_member = nullptr;
-    tmp.now_point = nullptr;
-    tmp._n = 0;
+       tmp.neutral_earthing();
     }
   };  // copy construtor
 
 
 
 
-  list(list&& l) { move(l); 
-  
-  null_elements( l);}
+  list(list&& l) { 
+    move(l); 
+    l->neutral_earthing();
+  }
 
   ~list() { clear(); }  // destructor
 
@@ -233,10 +231,7 @@ class list {
             this->begin_member = tmp;
             this->_n--;
         }
-        this->begin_member = nullptr;
-        this->now_point = nullptr;
-        this->end_member = nullptr;
-        this->_n = 0;
+        this->neutral_earthing();
         tmp = nullptr;
     }
   }
@@ -300,10 +295,7 @@ void merge(list& other) {
   {
     this->end_member =  this->end_member->next;
   }
-  other._n = 0;
-  other.begin_member = nullptr;
-  other.end_member = nullptr;
-  other.now_point = nullptr;
+ other.neutral_earthing();
 }
 
 
@@ -317,10 +309,55 @@ void merge(list& other) {
   }
 }
 
-  void reverse();
+  void reverse() { // может стопаться из-за первого элемента
+  if (!this->empty()) {
+    member<T>* tmp_member;
+    // size_type step = 0;
+    for (iterator it = this->begin(); it.ptr_->before != nullptr; --it) {
+      tmp_member = it.ptr_->before;
+      it.ptr_->before = it.ptr_->next;
+      it.ptr_->next = tmp_member;
+    }
+    tmp_member = this->begin_member;
+    this->begin_member = this->end_member;
+    this->end_member = tmp_member;
+  }
+}
   void unique(); // после реализации сортировки 
-  void sort();
+  
+  void sort(){
+  if (this->_n > 1){
+    this->begin_member =  recursSort(*this);
+  }
+}
   ///////////////////////
+
+  member<T>* recursSort(list mainList){
+  list<T> leftList;
+  list<T> rightList;
+  if (mainList._n <=1){
+    return mainList.begin_member;
+  }
+  mainList.now_point = mainList.begin_member;
+  for (size_type i = 0 ; i < mainList._n; i++){
+    if (i < mainList._n /2){
+      leftList.add_New_member(mainList.now_point->value); // сомнения по поводу этой тоски 
+    } 
+    else {
+      rightList.add_New_member(mainList.now_point->value);
+    }
+    mainList.now_point = mainList.now_point->next;
+  }
+
+  member<T> *tmp = merge_two_lists(recursSort(leftList), recursSort(rightList)) ;
+  leftList.neutral_earthing();
+  rightList.neutral_earthing();
+  return tmp;
+    // mainList.begin_member = leftList.begin_member;
+}
+
+
+
 
   void move(list l) {
     this->begin_member = l.begin_member;
@@ -330,11 +367,18 @@ void merge(list& other) {
     
   };
 
-  void null_elements(list&& l){
-    l.begin_member = nullptr;
-    l.end_member = nullptr;
-    l.now_point = nullptr;
-    l._n = 0;
+  // void null_elements(list&& l){
+  //   l.begin_member = nullptr;
+  //   l.end_member = nullptr;
+  //   l.now_point = nullptr;
+  //   l._n = 0;
+  // }
+
+  void neutral_earthing(){
+    this->begin_member = nullptr;
+    this->end_member = nullptr;
+    this->now_point = nullptr;
+    this->_n = 0;
   }
 
 member<T>* merge_two_lists(member<T>* left, member<T>* right) {
@@ -389,7 +433,7 @@ member<T>* merge_two_lists(member<T>* left, member<T>* right) {
   }
 
   void operator()(T value) { now_point->value = value; }
-  int recursSort(list& mainList);
+
  private:
   member<T>* begin_member;  //ну думаю что мы знаем что у нас идет первым
    member<T>* now_point;
