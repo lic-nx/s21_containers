@@ -294,27 +294,16 @@ class list {
 
 
 void merge(list& other) {
-  iterator ptr_this = this->begin();
-  iterator ptr_other = other->begin();
-  while (!other.empty()){
-    if(!this->empty()){
-
-    }
+  this->begin_member = merge_two_lists(this->begin_member, other.begin_member); // 
+  this->_n += other._n;
+  while (this->end_member->next != nullptr)
+  {
+    this->end_member =  this->end_member->next;
   }
-
-
-  // merge_two_lists(*this, other); // 
-  // while (this->begin_member->before!=nullptr)
-  // {
-  //   this->begin_member = this->begin_member->before;
-  //   /* code */
-  // }
-  // while (this->end_member->next!=nullptr)
-  // {
-  //   this->end_member = this->end_member->next;
-  //   /* code */
-  // }
-  
+  other._n = 0;
+  other.begin_member = nullptr;
+  other.end_member = nullptr;
+  other.now_point = nullptr;
 }
 
 
@@ -348,33 +337,23 @@ void merge(list& other) {
     l._n = 0;
   }
 
-  
-void merge_two_lists(list& left, list& right) {
-  list<T>* tmp_list = new list<T>(1);
-  iterator iter = left->begin();
-  iterator iter_other = right->begin();
-  while(left->begin_member->next!=nullptr && right->begin_member->next!=nullptr){
-    if (iter.ptr_->value > iter_other.ptr_->value){
-      tmp_list->insert();
-
-    }
-    else if(iter.ptr_->value <= iter_other.ptr_->value && iter.ptr_->next!=nullptr){
-      iter++;
-    }
-    else  if(iter.ptr_->next!=nullptr)
-    {
-      iter.ptr_->next = iter_other.ptr_;
-      iter_other.ptr_->before = iter.ptr_;
-      break;
-    }
-    
-    else{
-      insert(iter, iter_other.ptr_->value);
-      iter_other++;
-    }
-    tmp_list->_n +=1;
+member<T>* merge_two_lists(member<T>* left, member<T>* right) {
+  member<T>* return_member = nullptr;
+  if (left == nullptr){
+    return right;
   }
-
+  else if (right == nullptr){
+    return left;
+  }
+  if(left->value <= right->value){
+    return_member = left;
+    return_member->next = merge_two_lists(left->next, right);
+  }
+  else if(left->value > right->value){
+    return_member = right;
+    return_member->next = merge_two_lists(left, right->next);
+  }
+  return return_member;
 }
 
   void create_first(T value = 0) {
