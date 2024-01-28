@@ -327,33 +327,35 @@ void merge(list& other) {
   
   void sort(){
   if (this->_n > 1){
-    this->begin_member =  recursSort(*this);
+    // member<T>*  tmp = this->begin_member;
+   this->begin_member = this->recursSort();
+  
   }
 }
   ///////////////////////
 
-  member<T>* recursSort(list mainList){
+  member<T>* recursSort(){
   list<T> leftList;
   list<T> rightList;
-  if (mainList._n <=1){
-    return mainList.begin_member;
+  if (this->_n <=1){
+    return this->begin_member;  
   }
-  mainList.now_point = mainList.begin_member;
-  for (size_type i = 0 ; i < mainList._n; i++){
-    if (i < mainList._n /2){
-      leftList.add_New_member(mainList.now_point->value); // сомнения по поводу этой тоски 
+  this->now_point = this->begin_member;
+  for (size_type i = 0 ; i < this->_n; i++){
+    if (i < this->_n /2){
+      leftList.add_New_member(this->now_point->value); // сомнения по поводу этой тоски 
     } 
     else {
-      rightList.add_New_member(mainList.now_point->value);
+      rightList.add_New_member(this->now_point->value);
     }
-    mainList.now_point = mainList.now_point->next;
+    this->now_point = this->now_point->next;
   }
 
-  member<T> *tmp = merge_two_lists(recursSort(leftList), recursSort(rightList)) ;
+  member<T> *tmp = merge_two_lists(leftList.recursSort(), rightList.recursSort()) ;
   leftList.neutral_earthing();
   rightList.neutral_earthing();
   return tmp;
-    // mainList.begin_member = leftList.begin_member;
+  // this->begin_member = leftList.begin_member;
 }
 
 
