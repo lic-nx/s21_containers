@@ -41,6 +41,14 @@ namespase s21{
             }
         }
 
+        queue(queue &&q){
+            move(q); 
+            q->neutral_earthing();
+        }
+
+        ~queue(){
+            clear();
+        }
 
 
     }
