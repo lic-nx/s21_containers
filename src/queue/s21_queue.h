@@ -1,58 +1,65 @@
 #ifndef S21_QUEUE_H
 #define S21_QUEUE_H
 
-#include <iostream>
-// #include <memory>
 #include <initializer_list>  // предоставляет инициализационный список
-// #include "s21_list_iterator.h"
+#include <iostream>
+
 #include "../list/s21_list.h"
 
-namespase s21{
+namespace s21 {
 
-    template <typename T>
-    class queue: private list{
-        queue(){
-            this->begin_member = nullptr;
-            this->end_member = nullptr;
-            this->_n = 0;
-            this->now_point = 0;
-        }
-        queue(std:initializer_lists<value_type> const &items){
-            create_first(*(items.begin()));
-            for (auto it = items.begin() + 1; it != items.end(); ++it) {
-                const auto& item = *it;
-                add_New_member(item);
-            }
-        }
-        queue(const queue &q){
-            if (q._n != 0) {
-                queue<T> tmp;
-                tmp.begin_member = q.begin_member;
-                tmp.end_member = q.end_member;
-                tmp._n = q._n;
-                this->create_first(tmp.begin_member->value);
-                // tmp.begin_member=tmp.begin_member->next;
-                for (auto iter = tmp.begin()++; iter !=  nullptr; iter++)
-                {
-                    const auto& item = *iter;
-                    this->add_New_member(item);
-                }
-                tmp.neutral_earthing();
-            }
-        }
+template <typename T>
+class queue : private list<T> {
+ public:
 
-        queue(queue &&q){
-            move(q); 
-            q->neutral_earthing();
-        }
+  typedef T value_type;
+  typedef T& reference;
+  typedef const T& const_reference;
+  typedef std::size_t size_type;
 
-        ~queue(){
-            clear();
-        }
+  queue() { this->neutral_earthing(); }
 
-
+  queue(std::initializer_list<value_type> const& items) {
+    list<T>::create_first(*(items.begin()));
+    for (auto it = items.begin() + 1; it != items.end(); ++it) {
+      const auto& item = *it;
+      list<T>::add_New_member(item);
     }
+  }
 
-}
+  queue(const queue& q) : list<T>(q) { list<T>::copy(q); }
+
+  queue(queue&& q) {
+    move(q);
+    q->neutral_earthing();
+  }
+
+  ~queue() { list<T>::clear(); }
+
+  void operator=(queue& q){
+        list<T>::copy(q);
+  };
+
+  void operator=(queue&& q){
+    list<T>::move(q);  // проверить работу
+        q.neutral_earthing();
+  }
+
+  const_reference front() { return list<T>::front(); };
+
+  const_reference back() { return list<T>::back(); };
+
+  bool empty() { return list<T>::empty(); }
+
+  size_type size() { return list<T>::size(); };
+
+  void push(const_reference value) { push_back(value); }
+
+  void pop() { list<T>::pop_front(); }
+
+  void swap(queue& other) { list<T>::swap(other); }
+};
+
+}  // namespace s21
 
 #endif /*S21_QUEUE_H*/

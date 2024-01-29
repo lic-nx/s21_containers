@@ -97,6 +97,10 @@ class ListIterator {
   bool operator==(ListIterator other) { return this->ptr_ == other.ptr_; }
   bool operator!=(ListIterator other) { return this->ptr_ != other.ptr_; }
 
+  bool operator>=(ListIterator other) { return this->ptr_->value >= other.ptr_->value; }
+  bool operator<=(ListIterator other) { return this->ptr_->value<= other.ptr_->value; }
+  bool operator<(ListIterator other) { return this->ptr_->value < other.ptr_->value; }
+  bool operator>(ListIterator other) { return this->ptr_->value > other.ptr_->value; }
  private:
   member<T>* ptr_ = nullptr;
   friend class list<T>;
@@ -153,6 +157,10 @@ class list {
 
 
   list(const list& l) { // можно и лучше так то // done
+    copy(l);
+  };  // copy construtor
+
+ void copy(const list& l){
     if (l._n != 0) {
       list<T> tmp;
       tmp.begin_member = l.begin_member;
@@ -167,22 +175,24 @@ class list {
       }
        tmp.neutral_earthing();
     }
-  };  // copy construtor
-
-
+ }
 
 
   list(list&& l) { 
     move(l); 
-    l->neutral_earthing();
+    l.neutral_earthing();
   }
 
   ~list() { clear(); }  // destructor
 
   void operator=(list&& l) {
     move(l);  // проверить работу
+    l.neutral_earthing();
   }           // перегрузка оператора перемещения
 
+  void operator=(list& l){
+    copy(l);
+  }
 
   const_reference front(){
   return this->begin_member->value; //не уверена что именно такое возвращаем
@@ -236,24 +246,46 @@ class list {
     }
   }
 
+void erase(iterator pos){
+  if(!this->empty()){
+    member<T>* tmp_member = pos.ptr_;
+
+    if(pos.ptr_ == this->begin_member){
+      this->pop_front();
+    }
+    else if (pos.ptr_ == this->end_member){
+      this->pop_back();
+    }
+    else{
+      // member<T>* tmp_member = pos.ptr_;
+      pos.ptr_->before->next = pos.ptr_->next;
+      pos.ptr_->next->before = pos.ptr_->before;
+      tmp_member->destroy();
+      this->_n--;
+    }
+  }
+}
   // очищает лист
   iterator insert( iterator pos,  const_reference value){
-  member<T>* tmp_member = new member<T>(value);
-  if (pos.ptr_->before == nullptr){
-    pos.ptr_->before = tmp_member; // настроить ссылки обратно и настроить _n у листа 
-    tmp_member->next = pos.ptr_; // сомнения что это работает 
-    this->begin_member = tmp_member; // выглядит как костыль 
-  }
-  else{
-    tmp_member->next = pos.ptr_;
-    tmp_member->before = pos.ptr_->before->next;
-    pos.ptr_->before->next = tmp_member;
-    pos.ptr_->before = tmp_member;
-  }
+    if(pos.ptr_ != nullptr){
+      member<T>* tmp_member = new member<T>(value);
+      if (pos.ptr_->before == nullptr){
+        this->push_front(value);
+      }
+      else{
+        tmp_member->next = pos.ptr_;
+        tmp_member->before = pos.ptr_->before;
+        pos.ptr_->before->next = tmp_member;
+        pos.ptr_->before = tmp_member;
+      }
+    }
+    else{
+      this->add_New_member(value);
+      pos.ptr_ = this->begin_member;
+    }
   return pos;
-  }// добавляет элемент
-  // в определенное место и возвращает итератор void erase(iterator pos); //
-  // удаляет элемент по итератору
+  }
+
   void push_back(const_reference value) { // done 
     add_New_member(value);
   }  // добавляет элемент в конец листа
@@ -265,11 +297,16 @@ class list {
   }  // удаляет элемент с конца
 
   void push_front(const_reference value) { // done
+  if(!this->empty()){
     member<T>* new_front = new member<T>(value, this->begin_member, nullptr);
     this->begin_member->before = new_front;
     this->begin_member = new_front;
     this->now_point = new_front;
     this->_n++;
+    }
+  else{
+    this->add_New_member(value);
+  }
   }  // добавляет элемент в начало листа
 
   void pop_front() { // done
@@ -323,7 +360,21 @@ void merge(list& other) {
     this->end_member = tmp_member;
   }
 }
-  void unique(); // после реализации сортировки 
+  void unique(){
+    if(!this->empty()){
+      for (iterator now_ptr = begin(); now_ptr != end();) {
+        iterator tmp = now_ptr;
+        tmp++;
+        if (tmp.ptr_ == nullptr) {
+          return;
+        } else if (*now_ptr == *tmp) {
+          erase(tmp);
+        } else {
+          now_ptr++;
+        }
+      }
+    }
+  } // после реализации сортировки 
   
   void sort(){
   if (this->_n > 1){
@@ -364,9 +415,13 @@ void merge(list& other) {
   void move(list l) {
     this->begin_member = l.begin_member;
     this->end_member = l.end_member;
-    this->now_point = begin_member;
+    this->now_point = this->begin_member;
     this->_n = l._n;
-    
+    l.begin_member = nullptr;
+    l.end_member = nullptr;
+    l.now_point = nullptr;
+    l._n = 0;
+    // l.neutral_earthing();
   };
 
   // void null_elements(list&& l){
