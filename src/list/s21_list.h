@@ -13,7 +13,7 @@ namespace s21 {
 class member {
 public:
     member() {
-        this->value = 0;
+        this->value;
         this->next = nullptr;
         this->before = nullptr;
     };
@@ -29,7 +29,7 @@ public:
     void destroy() {
         this->next = nullptr;
         this->before = nullptr;
-        this->value = 0;
+        // this->value;
     }
 
     T value;
@@ -310,7 +310,7 @@ void erase(iterator pos){
   }  // добавляет элемент в начало листа
 
   void pop_front() { // done
-    {
+    if (!this->empty()) {
       this->begin_member = this->begin_member->next;
       this->begin_member->before->destroy();  // страшная конструкция
       this->_n -= 1;
@@ -318,10 +318,18 @@ void erase(iterator pos){
   }  // удаление первого элемента
 
   void swap(list& other) {
-    list<T>* tmp = new list<T>();
-    tmp = other;
-    other = *this;
-    *this = tmp;  // ну надо будет проверить
+    member<T>* tmp ;
+    tmp = other.begin_member;
+    other.begin_member = this->begin_member;
+    this->begin_member = tmp;  // ну надо будет проверить
+    
+    size_t s_tmp = other._n;
+    other._n = this->_n;
+    this->_n = s_tmp;
+    
+    tmp = other.end_member;
+    other.end_member = this->end_member;
+    this->end_member = tmp;
   };
 
 
@@ -421,7 +429,7 @@ void merge(list& other) {
     l.end_member = nullptr;
     l.now_point = nullptr;
     l._n = 0;
-    // l.neutral_earthing();
+    l.neutral_earthing();
   };
 
   // void null_elements(list&& l){
@@ -475,7 +483,7 @@ member<T>* merge_two_lists(member<T>* left, member<T>* right) {
 
   T get_elenemt() { return now_point->value; } // done
 
-  void add_New_member(T value_member = 0) {  // создаем члена в конце листа и
+  void add_New_member(T value_member = NULL) {  // создаем члена в конце листа и
                                              // end теперь указывает на него
     if(this->_n > 0){
     this->end_member->next = new member<T>(value_member, nullptr, this->end_member);

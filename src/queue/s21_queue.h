@@ -30,8 +30,8 @@ class queue : private list<T> {
   queue(const queue& q) : list<T>(q) { list<T>::copy(q); }
 
   queue(queue&& q) {
-    move(q);
-    q->neutral_earthing();
+    list<T>::move(q);
+    q.neutral_earthing();
   }
 
   ~queue() { list<T>::clear(); }
@@ -53,7 +53,7 @@ class queue : private list<T> {
 
   size_type size() { return list<T>::size(); };
 
-  void push(const_reference value) { push_back(value); }
+  void push(const_reference value) { list<T>::push_back(value); }
 
   void pop() { list<T>::pop_front(); }
 
