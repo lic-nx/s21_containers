@@ -56,6 +56,12 @@ class queue : private list<T> {
   void push(const_reference value) { list<T>::push_back(value); }
 
   void pop() { list<T>::pop_front(); }
+  void insert_many_back(Args&&... args){ 
+    list<T>::insert_many_back(args);}
+
+    void insert_many_front(Args&&... args){
+      list<T>::insert_many_front(args);
+    }
 
   void swap(queue& other) { list<T>::swap(other); }
 };

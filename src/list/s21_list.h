@@ -390,8 +390,32 @@ void merge(list& other) {
    this->begin_member = this->recursSort();
   
   }
-}
-  ///////////////////////
+};
+
+iterator insert_many(const_iterator pos, Args&&... args){ // бонус
+  for (const auto& arg : {args...}) {
+    insert(pos, arg);
+  }
+  return pos;
+};
+
+
+
+void insert_many_back(Args&&... args){
+  for (const auto& arg : {args...}) {
+    
+    push_back(arg);
+  }
+  // return pos;
+};
+
+void insert_many_front(Args&&... args){
+  for (const auto& arg : {args...}) {
+    
+    push_front(arg);
+  }
+};
+  ////////////////////////
 
   member<T>* recursSort(){
   list<T> leftList;
