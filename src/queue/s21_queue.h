@@ -1,5 +1,5 @@
-#ifndef S21_QUEUE_H
-#define S21_QUEUE_H
+#ifndef CPP2_S21_CONTAINERS_1_SRC_S21_QUEUE_H_
+#define CPP2_S21_CONTAINERS_1_SRC_S21_QUEUE_H_
 
 #include <initializer_list>  // предоставляет инициализационный список
 #include <iostream>
@@ -11,7 +11,6 @@ namespace s21 {
 template <typename T>
 class queue : private list<T> {
  public:
-
   typedef T value_type;
   typedef T& reference;
   typedef const T& const_reference;
@@ -27,22 +26,20 @@ class queue : private list<T> {
     }
   }
 
-  queue(const queue& q) : list<T>(q) { list<T>::copy(q); }
+  queue(const queue& q) : list<T>(q) {}
 
   queue(queue&& q) {
     list<T>::move(q);
-    q.neutral_earthing();
+    q.clear();
   }
 
   ~queue() { list<T>::clear(); }
 
-  void operator=(queue& q){
-        list<T>::copy(q);
-  };
+  void operator=(queue& q) { list<T>::copy(q); };
 
-  void operator=(queue&& q){
+  void operator=(queue&& q) {
     list<T>::move(q);  // проверить работу
-        q.neutral_earthing();
+    q.clear();
   }
 
   const_reference front() { return list<T>::front(); };
@@ -56,16 +53,21 @@ class queue : private list<T> {
   void push(const_reference value) { list<T>::push_back(value); }
 
   void pop() { list<T>::pop_front(); }
-  void insert_many_back(Args&&... args){ 
-    list<T>::insert_many_back(args);}
 
-    void insert_many_front(Args&&... args){
-      list<T>::insert_many_front(args);
-    }
+  template <typename... Args>
+
+  void insert_many_back(Args&&... args) {
+    list<T>::insert_many_back(std::forward<Args>(args)...);
+  }
+
+  template <typename... Args>
+  void insert_many_front(Args&&... args) {
+    list<T>::insert_many_front(std::forward<Args>(args)...);
+  }
 
   void swap(queue& other) { list<T>::swap(other); }
 };
 
 }  // namespace s21
 
-#endif /*S21_QUEUE_H*/
+#endif  //  CPP2_S21_CONTAINERS_1_SRC_S21_QUEUE_H_
